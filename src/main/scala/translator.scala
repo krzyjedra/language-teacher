@@ -1,12 +1,29 @@
+import scala.io.Source
 import scala.io.StdIn.readLine
 
 class translator {
 
+  val filePath = "C:\\Users\\g.olko\\Desktop\\slownik.txt"
+  val listOfWords: List[String] = Source.fromFile(filePath)
+    .getLines()
+    .flatMap(_.split("\\W+")).toList
+  val dictionary = listOfWords.foldLeft(Map.empty[String,String]){(z,w)=>
+    if(listOfWords.indexOf(w)%2 == 0){
+      z + (w -> listOfWords(listOfWords.indexOf(w)+1))
+    }else{
+      z
+    }
+  }
+  var globalScore = Map.empty[String,Int]
   val l = List(("ksiazka", "book"), ("drzwi", "door"), ("okno", "window"))
   def askingLoop()={
     var x = ""
     while(x != "q"){
-      askForTranslation(l)
+      val gameScore = askForTranslation(dictionary.toList)
+      globalScore =  gameScore.foldLeft(globalScore){(globalScore,w) =>
+       globalScore + (w._1 -> (globalScore.getOrElse(w._1, 0) + w._2))
+      }
+      globalScore.foreach(println)
       x = readLine("Do u want to exit? press q to exit: ")
     }
   }
@@ -26,6 +43,7 @@ class translator {
       }
     }
    // println(s"final score: $score / ${ls.length}")
-    wordList.foreach(println)
+    //wordList.foreach(println)
+    wordList
   }
 }
