@@ -3,7 +3,7 @@ import scala.io.StdIn.readLine
 
 class translator {
 
-  val filePath = "C:\\Users\\g.olko\\Desktop\\slownik.txt"
+  val filePath = "C:\\Users\\g.olko\\IdeaProjects\\language-teacher\\dictionary"
   val listOfWords: List[String] = Source.fromFile(filePath)
     .getLines()
     .flatMap(_.split("\\W+")).toList
